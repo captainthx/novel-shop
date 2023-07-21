@@ -1,87 +1,95 @@
 <script setup lang="ts">
-import {storeToRefs} from 'pinia';
-import {fetchAll} from '@/services/bookService'
-import {useAuthStore} from '@/stores/auth'
-import type {book} from "@/services";
-import {onBeforeMount, ref} from "vue";
-import {useLoadingBar} from "naive-ui";
-import VueError from "@/components/VueError.vue";
+import { fetchAll } from '@/services/globalService';
+import type { book } from '@/services';
+import { onBeforeMount, ref } from 'vue';
+import { useLoadingBar, useMessage } from 'naive-ui';
 
-const {token} = storeToRefs(useAuthStore());
-const urlImg = import.meta.env.VITE_APIURL + "/v1/img/"
-const bookRef = ref<Array<book>>();
-const loadingBar = useLoadingBar()
+const urlImg = import.meta.env.VITE_APIURL + '/v1/global/';
+const bookRef = ref<book[]>([]);
+const loadingBar = useLoadingBar();
 const errMessage = ref<string>('');
+const message = useMessage();
 
 async function fetchBook() {
     loadingBar.start();
     try {
-        const response = await fetchAll(token.value?.accessToken, {
+        const response = await fetchAll({
             page: 1,
-            limit: 10
+            limit: 10,
         });
-        if (response.status == 200) {
-            bookRef.value = response.data.result;
+        if (response.status === 200 && response.data.code === 0) {
             loadingBar.finish();
+            if (response.data.result) bookRef.value.push(...response.data.result);
+            return bookRef.value;
         }
-    } catch (e) {
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            message.error('error' + e);
+        } else if (e instanceof Error) {
+            message.error('error' + e.message);
+        }
         loadingBar.error();
-        errMessage.value = e.response.data.text
     }
+    return null;
 }
 
-
-
 onBeforeMount(() => {
-    fetchBook()
-})
-
+    fetchBook();
+});
 </script>
 
 <template>
-    <div class="title">
-        <h2>{{ $t('page.recommend') }}</h2>
-    </div>
-
-    <div>
-        <n-carousel
-                effect="custom"
-                :transition-props="{ name: 'creative' }"
-                show-arrow
-                style="height: 300px"
-        >
-            <img v-for="item in bookRef" :key="item.id"
-                    class="carousel-img"
-                    :src="urlImg+item.imageName"
-            />
-        </n-carousel>
-    </div>
-    <div class="title">
-        <h2>{{ $t('page.mostView') }}</h2>
-    </div>
     <n-layout content-style="padding: 25px;" :native-scrollbar="false">
-        <div>
-            <n-grid cols="4   m:4 l:5 xl:6  " responsive="screen" :x-gap="12" :y-gap="8">
-                <n-grid-item v-for="list in bookRef" :key="list.id">
-                    <router-link :to="`/book/${list.id}`">
-                        <n-card embedded="true" hoverable :title="list.name">
-                            <template #cover>
-                                <img style="width: 100% ; height: 300px" :src="urlImg+list.imageName"/>
-                            </template>
-                            <p>{{ list.type }}</p>
-                            <b>{{ list.synopsis }}</b>
-                        </n-card>
-                    </router-link>
-                </n-grid-item>
-            </n-grid>
-        </div>
-<!--        <div v-if="bookRef == null">-->
-<!--            <VueError :error="errMessage"/>-->
-<!--        </div>-->
+        <n-space vertical>
+            <div>
+                <div></div>
+                <div class="title">
+                    <h2>{{ $t('page.recommend') }}</h2>
+                </div>
+                <div v-if="errMessage == ''">
+                    <n-carousel
+                        effect="custom"
+                        :transition-props="{ name: 'creative' }"
+                        show-arrow
+                        style="height: 300px"
+                    >
+                        <img
+                            v-for="item in bookRef"
+                            :key="item.id"
+                            class="carousel-img"
+                            :src="urlImg + item.imageName"
+                        />
+                    </n-carousel>
+                </div>
+
+                <div class="title" v-if="errMessage == ''">
+                    <h2>{{ $t('page.mostView') }}</h2>
+                </div>
+
+                <div>
+                    <n-grid cols="4   m:4 l:5 xl:6  " responsive="screen" :x-gap="12" :y-gap="8">
+                        <n-grid-item v-for="list in bookRef" :key="list.id">
+                            <router-link :to="`/book/${list.id}`">
+                                <n-card :embedded="true" hoverable :title="list.name">
+                                    <template #cover>
+                                        <img
+                                            style="width: 100%; height: 300px"
+                                            :src="urlImg + list.imageName"
+                                        />
+                                    </template>
+                                    <b>type: {{ list.type }}</b
+                                    ><br />
+                                    <b>synopsis: {{ list.synopsis }}</b>
+                                </n-card>
+                            </router-link>
+                        </n-grid-item>
+                    </n-grid>
+                </div>
+            </div>
+        </n-space>
     </n-layout>
 </template>
 <style scoped>
-
 .carousel-img {
     width: 100%;
     height: 240px;
@@ -98,5 +106,4 @@ onBeforeMount(() => {
 :deep(.creative-leave-active) {
     transition: all 0.3s ease;
 }
-
 </style>

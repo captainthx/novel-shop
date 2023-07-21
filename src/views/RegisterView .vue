@@ -12,35 +12,27 @@ const message = useMessage();
 const router = useRouter();
 const { getToken, saveToken } = useAuthStore();
 
-const loginFrom = ref<LoginData>({
-    username: '',
-    password: '',
-});
 const registerFrom = ref<RegisterData>({
     username: '',
     password: '',
     email: '',
 });
 
-const handleLogin = async (e: MouseEvent) => {
+const handleRegister = async (e: MouseEvent) => {
     e.preventDefault();
-    const response = await login(loginFrom.value);
+
+    const response = await register(registerFrom.value);
     if (response.status == 200) {
-        message.info('login successful!'), saveToken(response.data.result);
-        getToken();
         router.push('/');
+        message.success('registert successful! please login!');
+        clearForm();
         return;
     } else {
-        clearForm();
-        message.error('login Fail! ', response.data);
+        message.error('register fail! someting wrong! try again');
     }
 };
 
 function clearForm() {
-    loginFrom.value = {
-        username: '',
-        password: '',
-    };
     registerFrom.value = {
         username: '',
         email: '',
@@ -52,19 +44,24 @@ function clearForm() {
 <template>
     <n-layout content-style="padding: 24px; height: 75vh " :native-scrollbar="false">
         <n-space justify="center">
-            <n-card>
+            <n-card title="register">
                 <template #header>
-                    <h3 style="text-align: center">login</h3>
+                    <h3 style="text-align: center">register</h3>
                 </template>
-                <n-form ref="signupForm " :model="loginFrom">
+                <n-form :model="registerFrom">
                     <n-form-item-row label="Username">
-                        <n-input v-model:value="loginFrom.username" />
+                        <n-input v-model:value="registerFrom.username" />
+                    </n-form-item-row>
+                    <n-form-item-row label="email">
+                        <n-input v-model:value="registerFrom.email" />
                     </n-form-item-row>
                     <n-form-item-row label="Password">
-                        <n-input v-model:value="loginFrom.password" type="password" />
+                        <n-input v-model:value="registerFrom.password" />
                     </n-form-item-row>
                 </n-form>
-                <n-button type="primary" block secondary @click="handleLogin"> Sign In </n-button>
+                <n-button type="primary" block secondary strong @click="handleRegister">
+                    Sign up</n-button
+                >
             </n-card>
         </n-space>
     </n-layout>

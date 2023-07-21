@@ -1,83 +1,123 @@
 <script setup lang="ts">
-import {onBeforeMount, onMounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
-import {fetchById,addFavorite} from '@/services/bookService'
-import {useAuthStore} from "@/stores/auth";
-import {storeToRefs} from "pinia";
-import {book, tokenPayload} from "@/services";
-import {useLoadingBar, useMessage} from "naive-ui";
+import { onBeforeMount, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchById } from '@/services/globalService';
 
-const {token} = storeToRefs(useAuthStore());
+import { useLoadingBar, useMessage } from 'naive-ui';
+import type { book } from '@/services';
+import { CartOutline } from '@vicons/ionicons5';
+import { useCartStore } from '@/stores/cart';
+import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
+import { useNotification } from 'naive-ui';
+
+const { token } = storeToRefs(useAuthStore());
+const { countCart } = storeToRefs(useCartStore());
 const paramId = Number(useRoute().params.id);
-const bookRef = ref<book>();
-const loadingBar = useLoadingBar()
-const urlImg = import.meta.env.VITE_APIURL + "/v1/img/"
-const message = useMessage()
+const bookRef = ref<book>({
+    id: 0,
+    name: '',
+    type: '',
+    synopsis: '',
+    content: '',
+    price: 0,
+    imageName: '',
+});
+const { addCartItem } = useCartStore();
+const loadingBar = useLoadingBar();
+const urlImg = import.meta.env.VITE_APIURL + '/v1/global/';
+const message = useMessage();
+const notification = useNotification();
 
 async function fetchBookById() {
-    loadingBar.start()
+    loadingBar.start();
     try {
-        const response = await fetchById(paramId, token.value?.accessToken);
-        if (response.status == 200) {
-            bookRef.value = response.data.result;
-            loadingBar.finish()
+        const response = await fetchById(paramId);
+        if (response.status == 200 && response.data.code == 0) {
+            if (response.data.result) bookRef.value = response.data.result;
+
+            loadingBar.finish();
         }
-    } catch (e) {
-        console.log(e.response.data.text)
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            console.log(e);
+            message.error('error' + e);
+        } else if (e instanceof Error) {
+            console.log(e.message);
+
+            // router.push('/login');
+        }
+        loadingBar.error();
     }
 }
-const tokenData = JSON.parse(atob(token.value?.accessToken.split(".")[1])) as tokenPayload ;
 
-async function handleClick() {
-    try {
-        const response = await addFavorite({userId:tokenData.id,booId:paramId},token.value?.accessToken);
-
-        if (response.status != 200){
-
-        }
-    }catch (e) {
-        console.log(e)
+function addCart() {
+    if (token.value == null) {
+        notification.error({
+            title: 'Add to cart',
+            meta: 'Please login',
+            duration: 2000,
+        });
+        return;
     }
-    message.info('add to favorite')
+    addCartItem(bookRef.value);
+    notification.success({
+        title: 'Add to cart',
+        meta: 'Add to cart success',
+        duration: 500,
+    });
 }
-
+// const tokenData = JSON.parse(atob(token.value?.accessToken.split('.')[1])) as tokenPayload;
 
 onBeforeMount(() => {
     fetchBookById();
-})
+});
 </script>
 
 <template>
     <n-layout content-style="padding: 24px; " :native-scrollbar="false">
-        <div>
-            <n-space justify="end">
-                <n-button @click="handleClick">
-                    Click Me
-                </n-button>
-            </n-space>
-        </div>
-
-        <div class="title">
-            <h1>{{ bookRef?.name }}</h1>
-        </div>
-        <div>
-            <n-space justify="center">
-                <n-card embedded="true" style="align-items: center; " hoverable>
-                    <template #cover>
-                        <img style="width: 100%; height: 400px" :src="urlImg+bookRef?.imageName"/>
-                    </template>
-                    <h1 style="text-align: center"> synopsis</h1>
-                    <h2> {{ bookRef?.synopsis }}</h2>
-                </n-card>
-            </n-space>
-        </div>
-        <div>
-        </div>
+        <n-space vertical>
+            <div>
+                <n-space style="padding-top: 25px" justify="end">
+                    <n-button text>
+                        <n-badge :value="countCart" color="green">
+                            <n-icon :size="30" @click="addCart()">
+                                <CartOutline />
+                            </n-icon>
+                        </n-badge>
+                    </n-button>
+                </n-space>
+            </div>
+            <div class="title">
+                <h1>{{ bookRef.name }}</h1>
+            </div>
+            <div>
+                <n-space justify="center">
+                    <n-card style="align-items: center" hoverable>
+                        <template #cover>
+                            <img
+                                style="margin-left: auto; margin-right: auto"
+                                :src="urlImg + bookRef.imageName"
+                            />
+                        </template>
+                        <h3>price: {{ bookRef.price }} ฿</h3>
+                    </n-card>
+                </n-space>
+                <div>
+                    <h2 class="content">content</h2>
+                    <br />
+                    <p class="content">{{ bookRef.content }}</p>
+                </div>
+            </div>
+        </n-space>
     </n-layout>
-
 </template>
-
 <style scoped>
-
-
+.n-card {
+    width: 300px;
+}
+.content {
+    text-align: center;
+    font-weight: 700;
+}
 </style>

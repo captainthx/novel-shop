@@ -1,14 +1,14 @@
-import {createApp} from 'vue';
-import {createPinia} from 'pinia';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from './router';
 import naive from 'naive-ui';
-import {createI18n} from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 import th from '@/locale/thTh.ts';
 import ja from '@/locale/jaJa.ts';
 import en from '@/locale/enUs.ts';
-import {setupErrorHandler} from "@/errorHandler";
+import { setupErrorHandler } from "@/errorHandler";
 
 const i18n = createI18n({
     legacy: false,
@@ -20,7 +20,10 @@ const i18n = createI18n({
         en: en
     }
 });
-setupErrorHandler(router)
+
+
+
+setupErrorHandler(router);
 
 
 const app = createApp(App);

@@ -50,16 +50,30 @@ export interface TokenResponse {
     refreshExpire: number;
 }
 
+export interface ApiResponse<T> {
+    code: number;
+    description: string;
+    result: T?;
+    records: number;
+}
+
+
+export type ServerResponse<T> = Promise<AxiosResponse<ApiResponse<T>>>;
 
 export interface book {
     id: number;
-    imageName: string;
     name: string;
-    synopsis: string;
     type: string;
+    synopsis: string;
+    content: string;
+    price: number;
+    imageName: string;
+
 }
 
 export interface favorite {
     booId: number;
     userId: number;
 }
+
+

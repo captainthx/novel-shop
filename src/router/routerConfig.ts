@@ -1,3 +1,4 @@
+import { vue } from '@vitejs/plugin-vue';
 import type { RouteRecordRaw } from 'vue-router';
 
 const list: RouteRecordRaw[] = [
@@ -7,12 +8,18 @@ const list: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'home',
         component: () => import('@/views/HomeView.vue'),
       },
       {
         path: 'login',
         name: 'login',
         component: () => import('@/views/LoginView.vue'),
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('@/views/RegisterView .vue'),
       },
       {
         path: 'edit',
@@ -36,6 +43,7 @@ const list: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'book',
         component: () => import('@/views/BookView.vue'),
       },
       {
