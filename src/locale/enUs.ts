@@ -4,10 +4,10 @@ export default {
         book: 'Book',
         payment: 'Payment',
         about: 'About',
-        recommend:'Recommend',
-        mostView:  'MostView',
-        bank:'Bank',
-        credit:'Credit',
-        qrCode:'QR-code'
-    }
+        recommend: 'Recommend',
+        mostView: 'MostView',
+        bank: 'Bank',
+        credit: 'Credit',
+        qrCode: 'QR-code',
+    },
 };

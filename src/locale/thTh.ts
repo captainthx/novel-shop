@@ -4,10 +4,10 @@ export default {
         book: 'หนังสือ',
         payment: 'การเงิน',
         about: 'เกี่ยวกับ',
-        recommend:'แนะนำ',
-        mostView:  'ยอดฮิต',
-        bank:'ธนาคาร',
-        credit:'บัตรเครดิต',
-        qrCode:'QR-code'
-    }
+        recommend: 'แนะนำ',
+        mostView: 'ยอดฮิต',
+        bank: 'ธนาคาร',
+        credit: 'บัตรเครดิต',
+        qrCode: 'QR-code',
+    },
 };

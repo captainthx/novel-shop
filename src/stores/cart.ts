@@ -8,7 +8,6 @@ export const useCartStore = defineStore('cart', () => {
     const countCart = ref<number>(0);
 
     const addCartItem = (item: book) => {
-
         cart.value.push(item);
         countCart.value = cart.value.length;
     };
@@ -17,9 +16,5 @@ export const useCartStore = defineStore('cart', () => {
         cart.value.filter((item) => item.id !== id);
     };
 
-
-
-
     return { addCartItem, countCart, removeCartItem };
-
 });

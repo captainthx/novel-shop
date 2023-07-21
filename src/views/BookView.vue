@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { listbook } from '@/data';
-import {ref} from "vue";
+import { ref } from 'vue';
 
 const bookRef = ref();
-
 </script>
 
 <template>
@@ -27,5 +26,3 @@ const bookRef = ref();
         </n-grid>
     </div>
 </template>
-
-

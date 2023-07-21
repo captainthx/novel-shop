@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fetchAll } from '@/services/globalService';
-import type { book } from '@/services';
+import type { book, pagination, paginationResponse } from '@/services';
 import { onBeforeMount, ref } from 'vue';
 import { useLoadingBar, useMessage } from 'naive-ui';
 
@@ -9,17 +9,27 @@ const bookRef = ref<book[]>([]);
 const loadingBar = useLoadingBar();
 const errMessage = ref<string>('');
 const message = useMessage();
+const page = ref<paginationResponse>();
+
+const paramPage = ref<pagination>({
+    page: 1,
+    limit: 5,
+});
+
+let totalPage = ref<number>(0);
 
 async function fetchBook() {
     loadingBar.start();
     try {
         const response = await fetchAll({
-            page: 1,
-            limit: 10,
+            page: paramPage.value.page,
+            limit: paramPage.value.limit,
         });
         if (response.status === 200 && response.data.code === 0) {
             loadingBar.finish();
-            if (response.data.result) bookRef.value.push(...response.data.result);
+            if (response.data.result) bookRef.value = response.data.result;
+            page.value = response.data.pagination;
+            totalPage.value = page.value.records / page.value.limit;
             return bookRef.value;
         }
     } catch (e: unknown) {
@@ -30,7 +40,12 @@ async function fetchBook() {
         }
         loadingBar.error();
     }
-    return null;
+}
+
+function handleNextPage(page: number) {
+    paramPage.value.page = page;
+    fetchBook();
+    return paramPage.value.page;
 }
 
 onBeforeMount(() => {
@@ -67,7 +82,7 @@ onBeforeMount(() => {
                 </div>
 
                 <div>
-                    <n-grid cols="4   m:4 l:5 xl:6  " responsive="screen" :x-gap="12" :y-gap="8">
+                    <n-grid cols="4   s:2 m:4 l:5   " responsive="screen" :x-gap="12" :y-gap="8">
                         <n-grid-item v-for="list in bookRef" :key="list.id">
                             <router-link :to="`/book/${list.id}`">
                                 <n-card :embedded="true" hoverable :title="list.name">
@@ -86,6 +101,14 @@ onBeforeMount(() => {
                     </n-grid>
                 </div>
             </div>
+            <n-space justify="end">
+                <div>
+                    <n-pagination :page-count="totalPage" :on-update:page="handleNextPage">
+                        <template #prev> Go Prev </template>
+                        <template #next> Go Next </template>
+                    </n-pagination>
+                </div>
+            </n-space>
         </n-space>
     </n-layout>
 </template>

@@ -2,8 +2,6 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-
-
 export const useUserStore = defineStore('user', () => {
     const theme = ref('light');
     function toggleTheme() {
@@ -11,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     function active() {
-        return theme.value === "light";
+        return theme.value === 'light';
     }
 
     function toggleLang() {
@@ -19,11 +17,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
     function activeLang() {
-        return   useI18n().locale ;
-
+        return useI18n().locale;
     }
 
-
-    return { theme, active, toggleTheme, toggleLang,activeLang };
+    return { theme, active, toggleTheme, toggleLang, activeLang };
 });
-

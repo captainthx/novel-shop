@@ -8,7 +8,7 @@ import { createI18n } from 'vue-i18n';
 import th from '@/locale/thTh.ts';
 import ja from '@/locale/jaJa.ts';
 import en from '@/locale/enUs.ts';
-import { setupErrorHandler } from "@/errorHandler";
+import { setupErrorHandler } from '@/errorHandler';
 
 const i18n = createI18n({
     legacy: false,
@@ -17,17 +17,13 @@ const i18n = createI18n({
     messages: {
         th: th,
         ja: ja,
-        en: en
-    }
+        en: en,
+    },
 });
-
-
 
 setupErrorHandler(router);
 
-
 const app = createApp(App);
-
 
 app.use(createPinia());
 app.use(router);

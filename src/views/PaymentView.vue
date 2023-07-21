@@ -8,7 +8,7 @@ import {
 
 <template>
     <div class="title">
-        <h1>{{$t('page.payment')}}</h1>
+        <h1>{{ $t('page.payment') }}</h1>
     </div>
     <div style="height: 75vh">
         <n-grid cols="3" x-gap="20" y-gap="20">

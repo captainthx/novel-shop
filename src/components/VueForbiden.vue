@@ -1,13 +1,10 @@
-<script setup lang="ts">
-
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <n-result
-            status="403"
-            title="403 Forbidden"
-            description="Some of the doors are always close to you."
+        status="403"
+        title="403 Forbidden"
+        description="Some of the doors are always close to you."
     >
         <template #footer>
             <n-button>Take It Easy</n-button>

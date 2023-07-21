@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type {Component} from 'vue';
-import {h, ref} from 'vue';
+import type { Component } from 'vue';
+import { h, ref } from 'vue';
 import list from '@/router/routerConfig';
-import {NIcon, useMessage} from 'naive-ui';
+import { NIcon, useMessage } from 'naive-ui';
 import {
     BookmarkOutline as Bookmark,
     HomeOutline as Home,
@@ -13,16 +13,16 @@ import {
     Pencil as EditIcon,
     PersonCircleOutline as UserIcon,
     SearchOutline as Search,
-    SunnyOutline
+    SunnyOutline,
 } from '@vicons/ionicons5';
-import {RouterLink, useRouter} from 'vue-router';
-import {useUserStore} from '@/stores/theme';
-import {storeToRefs} from 'pinia';
-import {useAuthStore} from "@/stores/auth";
+import { RouterLink, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/theme';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
 
-const {active, lang} = storeToRefs(useUserStore());
-const {toggleTheme} = useUserStore();
-const {hasToken, getToken} = useAuthStore();
+const { active, lang } = storeToRefs(useUserStore());
+const { toggleTheme } = useUserStore();
+const { hasToken, getToken } = useAuthStore();
 const message = useMessage();
 const router = useRouter();
 const renderIcon = (icon: Component) => {
@@ -42,7 +42,7 @@ const options = [
                         name: 'profile',
                     },
                 },
-                {default: () => 'profile'}
+                { default: () => 'profile' }
             ),
         key: 'profile',
         icon: renderIcon(UserIcon),
@@ -56,7 +56,7 @@ const options = [
                         name: 'edit',
                     },
                 },
-                {default: () => 'edit'}
+                { default: () => 'edit' }
             ),
         key: 'edit',
         icon: renderIcon(EditIcon),
@@ -65,17 +65,16 @@ const options = [
         label: 'logout',
         key: 'logout',
         icon: renderIcon(LogoutIcon),
-        props: {onClick: () => handlingLogout()},
+        props: { onClick: () => handlingLogout() },
     },
 ];
 
 const handlingLogout = () => {
-    window.localStorage.removeItem("token");
-    message.success('logout success!')
-    getToken()
-    router.push('/login')
-
-}
+    window.localStorage.removeItem('token');
+    message.success('logout success!');
+    getToken();
+    router.push('/login');
+};
 
 const bookOptions = [
     {
@@ -87,7 +86,7 @@ const bookOptions = [
                         path: '/mybook',
                     },
                 },
-                {default: () => 'favorite'}
+                { default: () => 'favorite' }
             ),
         key: 'favorite',
         icon: renderIcon(List),
@@ -96,17 +95,17 @@ const bookOptions = [
 
 const langOptions = [
     {
-        label: "EN",
+        label: 'EN',
         value: 'en',
     },
     {
         label: 'JA',
-        value: 'ja'
+        value: 'ja',
     },
     {
-        label: "TH",
+        label: 'TH',
         value: 'th',
-    }
+    },
 ];
 
 // todo: search function
@@ -126,7 +125,7 @@ const find = () => {
                     <router-link to="/">
                         <n-button text>
                             <n-icon :size="20">
-                                <Home/>
+                                <Home />
                             </n-icon>
                         </n-button>
                     </router-link>
@@ -139,7 +138,7 @@ const find = () => {
                         <n-dropdown :options="bookOptions">
                             <n-button text>
                                 <n-icon size="25">
-                                    <Bookmark/>
+                                    <Bookmark />
                                 </n-icon>
                             </n-button>
                         </n-dropdown>
@@ -151,7 +150,7 @@ const find = () => {
                     <template #suffix>
                         <n-button text>
                             <n-icon :size="30" @click="find">
-                                <search/>
+                                <search />
                             </n-icon>
                         </n-button>
                     </template>
@@ -160,18 +159,22 @@ const find = () => {
             <div>
                 <n-space>
                     <div>
-                        <n-space vertical style="width:65px;">
-                            <n-select v-model:value="$i18n.locale" :options="langOptions" size="small "/>
+                        <n-space vertical style="width: 65px">
+                            <n-select
+                                v-model:value="$i18n.locale"
+                                :options="langOptions"
+                                size="small "
+                            />
                         </n-space>
                     </div>
                     <div>
                         <div>
                             <n-switch v-model:value="active" @click="toggleTheme" size="medium">
                                 <template #checked-icon>
-                                    <n-icon :component="MoonOutline"/>
+                                    <n-icon :component="MoonOutline" />
                                 </template>
                                 <template #unchecked-icon>
-                                    <n-icon :component="SunnyOutline"/>
+                                    <n-icon :component="SunnyOutline" />
                                 </template>
                             </n-switch>
                         </div>
@@ -180,7 +183,7 @@ const find = () => {
                         <n-dropdown :options="options">
                             <n-button text>
                                 <n-icon size="25">
-                                    <UserIcon/>
+                                    <UserIcon />
                                 </n-icon>
                             </n-button>
                         </n-dropdown>
@@ -189,12 +192,11 @@ const find = () => {
                         <router-link to="/login">
                             <n-button text>
                                 <n-icon size="25">
-                                    <Login/>
+                                    <Login />
                                 </n-icon>
                             </n-button>
                         </router-link>
                     </div>
-
                 </n-space>
             </div>
         </n-space>
@@ -215,5 +217,4 @@ a {
     font-size: larger;
     font-weight: 600;
 }
-
 </style>
