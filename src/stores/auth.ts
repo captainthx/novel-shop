@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { tokenPayload, TokenResponse } from '@/services';
+import type { TokenResponse } from '@/services';
 
 export const useAuthStore = defineStore('auth', () => {
     const token = ref<TokenResponse>();

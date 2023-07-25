@@ -40,12 +40,9 @@ async function fetchBookById() {
         }
     } catch (e: unknown) {
         if (typeof e === 'string') {
-            console.log(e);
             message.error('error' + e);
         } else if (e instanceof Error) {
-            console.log(e.message);
-
-            // router.push('/login');
+            message.error('error' + e.message);
         }
         loadingBar.error();
     }

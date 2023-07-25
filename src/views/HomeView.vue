@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { fetchAll } from '@/services/globalService';
-import type { book, pagination, paginationResponse } from '@/services';
+import { fetchNewBooks } from '@/services/globalService';
+import type { Book, Pagination, PaginationResponse } from '@/services';
 import { onBeforeMount, ref } from 'vue';
 import { useLoadingBar, useMessage } from 'naive-ui';
 
 const urlImg = import.meta.env.VITE_APIURL + '/v1/global/';
-const bookRef = ref<book[]>([]);
+const bookRef = ref<Book[]>([]);
 const loadingBar = useLoadingBar();
-const errMessage = ref<string>('');
 const message = useMessage();
-const page = ref<paginationResponse>();
+const page = ref<PaginationResponse>();
 
-const paramPage = ref<pagination>({
+const paramPage = ref<Pagination>({
     page: 1,
     limit: 5,
 });
@@ -21,7 +20,7 @@ let totalPage = ref<number>(0);
 async function fetchBook() {
     loadingBar.start();
     try {
-        const response = await fetchAll({
+        const response = await fetchNewBooks({
             page: paramPage.value.page,
             limit: paramPage.value.limit,
         });
@@ -56,63 +55,58 @@ onBeforeMount(() => {
 <template>
     <n-layout content-style="padding: 25px;" :native-scrollbar="false">
         <n-space vertical>
-            <div>
-                <div></div>
-                <div class="title">
-                    <h2>{{ $t('page.recommend') }}</h2>
-                </div>
-                <div v-if="errMessage == ''">
-                    <n-carousel
-                        effect="custom"
-                        :transition-props="{ name: 'creative' }"
-                        show-arrow
-                        style="height: 300px"
-                    >
-                        <img
-                            v-for="item in bookRef"
-                            :key="item.id"
-                            class="carousel-img"
-                            :src="urlImg + item.imageName"
-                        />
-                    </n-carousel>
-                </div>
-
-                <div class="title" v-if="errMessage == ''">
-                    <h2>{{ $t('page.mostView') }}</h2>
-                </div>
-
-                <div>
-                    <n-grid cols="4   s:2 m:4 l:5   " responsive="screen" :x-gap="12" :y-gap="8">
-                        <n-grid-item v-for="list in bookRef" :key="list.id">
-                            <router-link :to="`/book/${list.id}`">
-                                <n-card :embedded="true" hoverable :title="list.name">
-                                    <template #cover>
-                                        <img
-                                            style="width: 100%; height: 300px"
-                                            :src="urlImg + list.imageName"
-                                        />
-                                    </template>
-                                    <b>type: {{ list.type }}</b
-                                    ><br />
-                                    <b>synopsis: {{ list.synopsis }}</b>
-                                </n-card>
-                            </router-link>
-                        </n-grid-item>
-                    </n-grid>
-                </div>
+            <div class="title">
+                <h2>{{ $t('page.recommend') }}</h2>
             </div>
+            <n-carousel
+                effect="custom"
+                :transition-props="{ name: 'creative' }"
+                show-arrow
+                style="height: 300px"
+            >
+                <img
+                    alt="img banner"
+                    v-for="item in bookRef"
+                    :key="item.id"
+                    class="carousel-img"
+                    :src="urlImg + item.imageName"
+                />
+            </n-carousel>
+            <div class="title">
+                <h2>{{ $t('page.new') }}</h2>
+            </div>
+            <n-grid cols="1 s:2 m:3 l:5" responsive="screen" :x-gap="12" :y-gap="12">
+                <n-grid-item v-for="list in bookRef" :key="list.id">
+                    <router-link :to="`/book/${list.id}`">
+                        <n-card :embedded="true" hoverable :title="list.name">
+                            <template #cover>
+                                <img
+                                    alt="img book"
+                                    style="width: 100%; height: 300px"
+                                    :src="urlImg + list.imageName"
+                                />
+                            </template>
+                            <b>type: {{ list.type }}</b
+                            ><br />
+                            <b>synopsis: {{ list.synopsis }}</b>
+                        </n-card>
+                    </router-link>
+                </n-grid-item>
+            </n-grid>
             <n-space justify="end">
-                <div>
-                    <n-pagination :page-count="totalPage" :on-update:page="handleNextPage">
-                        <template #prev> Go Prev </template>
-                        <template #next> Go Next </template>
-                    </n-pagination>
-                </div>
+                <n-pagination :page-count="totalPage" :on-update:page="handleNextPage">
+                    <template #prev> Go Prev </template>
+                    <template #next> Go Next </template>
+                </n-pagination>
             </n-space>
         </n-space>
     </n-layout>
 </template>
 <style scoped>
+.n-card {
+    width: 280px;
+    height: 350px;
+}
 .carousel-img {
     width: 100%;
     height: 240px;

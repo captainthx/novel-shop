@@ -6,5 +6,3 @@
     </div>
     <div style="height: 70vh"></div>
 </template>
-
-<style scoped></style>

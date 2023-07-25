@@ -1,13 +1,12 @@
-import { RegisterData, book, register } from './index.d';
+import { type RegisterData } from './index.d';
 import api from '@/services/client';
-import type { LoginData, RefreshBody, ServerResponse, TokenResponse } from '@/services/index';
-import type { AxiosResponse } from 'axios';
+import type { LoginData, ServerResponse, TokenResponse } from '@/services/index';
 
-const login = (body: LoginData): Promise<AxiosResponse> => api.post('/v1/auth/signin', body);
+const login = (body: LoginData): ServerResponse<TokenResponse> => api.post('/v1/auth/signin', body);
 
-const register = (body: RegisterData): Promise<AxiosResponse> => api.post('/v1/auth/signup', body);
+const signup = (body: RegisterData): ServerResponse<void> => api.post('/v1/auth/signup', body);
 
-const refresh = (refreshToken: string | undefined): Promise<AxiosResponse> =>
+const refresh = (refreshToken: string | undefined): ServerResponse<TokenResponse> =>
     api.post('v1/auth/refresh', refreshToken);
 
-export { login, register, refresh };
+export { login, signup, refresh };

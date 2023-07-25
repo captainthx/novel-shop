@@ -1,4 +1,3 @@
-import { pagination } from './index.d';
 import type { AxiosResponse } from 'axios';
 
 export interface LoginData {
@@ -25,7 +24,7 @@ export interface AuthState {
     refreshPayload: TokenPayload;
 }
 
-export interface tokenPayload {
+export interface TokenPayload {
     iss: number;
     sub: string;
     id: number;
@@ -33,12 +32,12 @@ export interface tokenPayload {
     iat: number;
 }
 
-export interface pagination {
+export interface Pagination {
     page: number;
     limit: number;
 }
 
-export interface paginationResponse {
+export interface PaginationResponse {
     pages: number;
     limit: number;
     records: number;
@@ -54,14 +53,14 @@ export interface TokenResponse {
 export interface ApiResponse<T> {
     code: number;
     description: string;
-    pagination: paginationResponse;
+    pagination: PaginationResponse;
     result: T?;
     records: number;
 }
 
 export type ServerResponse<T> = Promise<AxiosResponse<ApiResponse<T>>>;
 
-export interface book {
+export interface Book {
     id: number;
     name: string;
     type: string;
@@ -71,9 +70,17 @@ export interface book {
     imageName: string;
 }
 
-export interface favorite {
-    booId: number;
-    userId: number;
+export interface Address {
+    line1: string;
+    line2: string;
+    zipCode: string;
 }
 
-export interface paginationResponse {}
+
+export interface AddressResponse {
+    id: number;
+    line1: string;
+    line2: string;
+    zipCode: number;
+}
+

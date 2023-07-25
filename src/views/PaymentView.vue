@@ -11,7 +11,13 @@ import {
         <h1>{{ $t('page.payment') }}</h1>
     </div>
     <div style="height: 75vh">
-        <n-grid cols="3" x-gap="20" y-gap="20">
+        <n-grid
+            cols="1  m:2 l:3"
+            :x-gap="20"
+            :y-gap="20"
+            item-responsive="true"
+            responsive="screen"
+        >
             <n-grid-item>
                 <n-card :title="$t('page.credit')" embedded="true" hoverable>
                     <n-icon size="30">

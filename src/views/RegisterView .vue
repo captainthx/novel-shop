@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useMessage, type FormRules, type FormInst, type FormValidationError } from 'naive-ui';
 import type { RegisterData } from '@/services';
-import { register } from '@/services/authService';
+import { signup } from '@/services/authService';
 import { useRouter } from 'vue-router';
 
 const message = useMessage();
@@ -23,7 +23,7 @@ const rules: FormRules = {
     ],
     password: [
         { required: true, message: 'password is required' },
-        { min: 6, max: 20, message: 'password length should be 6 to 20' },
+        { min: 4, max: 20, message: 'password length should be 6 to 20' },
         { trigger: ['input', 'blur'] },
     ],
     email: [
@@ -38,7 +38,7 @@ const handleRegister = (e: MouseEvent) => {
     formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
         if (!errors) {
             try {
-                const response = await register(registerFrom.value);
+                const response = await signup(registerFrom.value);
                 if (response.status == 200 && response.data.code == 0) {
                     message.success('registert successful! please login!');
                     setTimeout(() => {
@@ -53,7 +53,7 @@ const handleRegister = (e: MouseEvent) => {
                 }
             }
         } else {
-            console.log(errors);
+            // console.log(errors);
             message.error('Invalid');
         }
     });

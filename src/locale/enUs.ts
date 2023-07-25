@@ -5,7 +5,7 @@ export default {
         payment: 'Payment',
         about: 'About',
         recommend: 'Recommend',
-        mostView: 'MostView',
+        new: 'New',
         bank: 'Bank',
         credit: 'Credit',
         qrCode: 'QR-code',

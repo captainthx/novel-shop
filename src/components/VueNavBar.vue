@@ -5,6 +5,7 @@ import list from '@/router/routerConfig';
 import { NIcon, useMessage } from 'naive-ui';
 import {
     BookmarkOutline as Bookmark,
+    CashOutline as Cash,
     HomeOutline as Home,
     List as List,
     LogInOutline as Login,
@@ -14,17 +15,22 @@ import {
     PersonCircleOutline as UserIcon,
     SearchOutline as Search,
     SunnyOutline,
+    ListOutline as NavList,
+    BookOutline as Book,
 } from '@vicons/ionicons5';
 import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/theme';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
+import { useIsMobile } from '@/responseDivice';
 
-const { active, lang } = storeToRefs(useUserStore());
+const { active } = storeToRefs(useUserStore());
 const { toggleTheme } = useUserStore();
 const { hasToken, getToken } = useAuthStore();
 const message = useMessage();
 const router = useRouter();
+const isMobile = useIsMobile();
+
 const renderIcon = (icon: Component) => {
     return () => {
         return h(NIcon, null, {
@@ -69,6 +75,51 @@ const options = [
     },
 ];
 
+const navOptions = [
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        path: '/',
+                    },
+                },
+                { default: () => 'home' }
+            ),
+        key: 'home',
+        icon: renderIcon(Home),
+    },
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        path: 'book',
+                    },
+                },
+                { default: () => 'book' }
+            ),
+        key: 'book',
+        icon: renderIcon(Book),
+    },
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        path: 'payment',
+                    },
+                },
+                { default: () => 'payment' }
+            ),
+        key: 'payment',
+        icon: renderIcon(Cash),
+    },
+];
+
 const handlingLogout = () => {
     window.localStorage.removeItem('token');
     message.success('logout success!');
@@ -109,19 +160,30 @@ const langOptions = [
 ];
 
 // todo: search function
-const msg = ref<string>('');
-const find = () => {
-    if (msg.value) {
-        alert('find value');
-        msg.value = '';
-    }
-};
+// const msg = ref<string>('');
+// const find = () => {
+//     if (msg.value) {
+//         alert('find value');
+//         msg.value = '';
+//     }
+// };
 </script>
 <template>
     <n-layout-header class="header" :bordered="false">
         <n-space justify="space-between">
             <div>
-                <n-space justify="space-between">
+                <n-button text v-if="isMobile">
+                    <n-icon size="25">
+                        <n-dropdown :options="navOptions">
+                            <n-button text>
+                                <n-icon size="25">
+                                    <NavList />
+                                </n-icon>
+                            </n-button>
+                        </n-dropdown>
+                    </n-icon>
+                </n-button>
+                <n-space v-else>
                     <router-link to="/">
                         <n-button text>
                             <n-icon :size="20">
@@ -145,7 +207,8 @@ const find = () => {
                     </div>
                 </n-space>
             </div>
-            <div>
+
+            <!-- <div v-if="!isMobile">
                 <n-input round placeholder="Search " @keyup.enter="find" v-model:value="msg">
                     <template #suffix>
                         <n-button text>
@@ -155,7 +218,7 @@ const find = () => {
                         </n-button>
                     </template>
                 </n-input>
-            </div>
+            </div> -->
             <div>
                 <n-space>
                     <div>
