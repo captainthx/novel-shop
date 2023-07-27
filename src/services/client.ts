@@ -3,7 +3,6 @@ import axios, { type AxiosInstance } from 'axios';
 import { storeToRefs } from 'pinia';
 const { token } = storeToRefs(useAuthStore());
 
-
 // Create a new Axios instance
 const api: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_APIURL,
@@ -12,6 +11,5 @@ const api: AxiosInstance = axios.create({
         Authorization: `Bearer ${token.value?.accessToken}`,
     },
 });
-
 
 export default api;

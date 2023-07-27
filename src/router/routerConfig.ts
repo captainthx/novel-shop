@@ -1,4 +1,3 @@
-import { vue } from '@vitejs/plugin-vue';
 import type { RouteRecordRaw } from 'vue-router';
 
 const list: RouteRecordRaw[] = [
@@ -32,6 +31,10 @@ const list: RouteRecordRaw[] = [
                 component: () => import('@/views/ProfileView.vue'),
             },
             {
+                path: '/:pathMatch(.*)*',
+                component: () => import('@/components/VueNotFound.vue'),
+            },
+            {
                 path: 'server-error',
                 component: () => import('@/components/VueServerError.vue'),
             },
@@ -50,10 +53,6 @@ const list: RouteRecordRaw[] = [
                 path: ':id',
                 component: () => import('@/views/BookDetailView.vue'),
             },
-            {
-                path: '/mybook',
-                component: () => import('@/views/BookShelfView.vue'),
-            },
         ],
     },
     {
@@ -66,6 +65,11 @@ const list: RouteRecordRaw[] = [
         component: () => import('@/views/AboutView.vue'),
         name: 'about',
     },
+    {
+        path: '/cart',
+        component: () => import('@/views/CartView.vue'),
+        name: 'cart',
+    }
     // ...accessRoutes,
 ];
 

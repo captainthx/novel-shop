@@ -9,5 +9,6 @@ export default {
         bank: 'Bank',
         credit: 'Credit',
         qrCode: 'QR-code',
+        cart: 'Cart',
     },
 };

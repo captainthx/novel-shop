@@ -70,12 +70,36 @@ export interface Book {
     imageName: string;
 }
 
+
+export interface BookCart {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+}
+
+export interface BookCartRequest {
+    bookId: number;
+    name: string;
+    quantity: number;
+    price: number;
+    quantity: number;
+    status: string;
+}
+
+export interface BookCartResponse {
+    bookId: number;
+    name: string;
+    quantity: number;
+    price: number;
+    status: string;
+}
+
 export interface Address {
     line1: string;
     line2: string;
     zipCode: string;
 }
-
 
 export interface AddressResponse {
     id: number;
@@ -83,4 +107,3 @@ export interface AddressResponse {
     line2: string;
     zipCode: number;
 }
-

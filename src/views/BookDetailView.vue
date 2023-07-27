@@ -2,19 +2,33 @@
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchById } from '@/services/globalService';
-
+import { createOrder } from '@/services/orderSerivce';
 import { useLoadingBar, useMessage } from 'naive-ui';
-import type { book } from '@/services';
+import type { Book } from '@/services';
 import { CartOutline } from '@vicons/ionicons5';
 import { useCartStore } from '@/stores/cart';
 import { useAuthStore } from '@/stores/auth';
 import { storeToRefs } from 'pinia';
 import { useNotification } from 'naive-ui';
 
+import { type BookCartResponse } from '@/services';
+
 const { token } = storeToRefs(useAuthStore());
 const { countCart } = storeToRefs(useCartStore());
+const { addCartItem, countItems, getCart, clearItem } = useCartStore();
 const paramId = Number(useRoute().params.id);
-const bookRef = ref<book>({
+const urlImg = import.meta.env.VITE_IMAGEURL;
+const quatityItem = ref<number>(0);
+
+const cartItem = ref<BookCartResponse>({
+    bookId: 0,
+    name: '',
+    price: 0,
+    quantity: 0,
+    status: '',
+});
+
+const listBookRef = ref<Book>({
     id: 0,
     name: '',
     type: '',
@@ -23,9 +37,7 @@ const bookRef = ref<book>({
     price: 0,
     imageName: '',
 });
-const { addCartItem } = useCartStore();
 const loadingBar = useLoadingBar();
-const urlImg = import.meta.env.VITE_APIURL + '/v1/global/';
 const message = useMessage();
 const notification = useNotification();
 
@@ -34,7 +46,7 @@ async function fetchBookById() {
     try {
         const response = await fetchById(paramId);
         if (response.status == 200 && response.data.code == 0) {
-            if (response.data.result) bookRef.value = response.data.result;
+            if (response.data.result) listBookRef.value = response.data.result;
 
             loadingBar.finish();
         }
@@ -48,31 +60,63 @@ async function fetchBookById() {
     }
 }
 
-function addCart() {
+async function addCart() {
     if (token.value == null) {
         notification.error({
             title: 'Add to cart',
             meta: 'Please login',
-            duration: 2000,
+            duration: 1000,
         });
         return;
     }
-    addCartItem(bookRef.value);
-    notification.success({
-        title: 'Add to cart',
-        meta: 'Add to cart success',
-        duration: 500,
-    });
+    countItems();
+    try {
+        addCartItem({
+            id: listBookRef.value.id,
+            name: listBookRef.value.name,
+            price: listBookRef.value.price,
+            quantity: quatityItem.value++,
+        });
+        const res = await createOrder({
+            bookId: listBookRef.value.id,
+            name: listBookRef.value.name,
+            price: listBookRef.value.price,
+            quantity: quatityItem.value,
+            status: 'pending',
+        });
+
+        if (res.status == 200 && res.data.code == 0) {
+            if (res.data.result) cartItem.value = res.data.result;
+            quatityItem.value = 0;
+            notification.success({
+                title: 'Add to cart',
+                meta: 'Add ' + cartItem.value.name + ' to cart success',
+                duration: 200,
+            });
+
+            return;
+        }
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            message.error('error' + e);
+        } else if (e instanceof Error) {
+            notification.error({
+                title: 'Add to cart',
+                meta: 'Please login',
+                duration: 2000,
+            });
+        }
+    }
 }
 // const tokenData = JSON.parse(atob(token.value?.accessToken.split('.')[1])) as tokenPayload;
 
-onBeforeMount(() => {
-    fetchBookById();
+onBeforeMount(async () => {
+    if (paramId) await fetchBookById();
 });
 </script>
 
 <template>
-    <n-layout content-style="padding: 24px; " :native-scrollbar="false">
+    <n-layout v-if="listBookRef.id != 0" content-style="padding: 24px; " :native-scrollbar="false">
         <n-space vertical>
             <div>
                 <n-space style="padding-top: 25px" justify="end">
@@ -86,7 +130,7 @@ onBeforeMount(() => {
                 </n-space>
             </div>
             <div class="title">
-                <h1>{{ bookRef.name }}</h1>
+                <h1>{{ listBookRef.name }}</h1>
             </div>
             <div>
                 <n-space justify="center">
@@ -94,16 +138,16 @@ onBeforeMount(() => {
                         <template #cover>
                             <img
                                 style="margin-left: auto; margin-right: auto"
-                                :src="urlImg + bookRef.imageName"
+                                :src="urlImg + listBookRef.imageName"
                             />
                         </template>
-                        <h3>price: {{ bookRef.price }} ฿</h3>
+                        <h3>price: {{ listBookRef.price }} ฿</h3>
                     </n-card>
                 </n-space>
                 <div>
-                    <h2 class="content">content</h2>
+                    <h3>content</h3>
                     <br />
-                    <p class="content">{{ bookRef.content }}</p>
+                    <p>{{ listBookRef.content }}</p>
                 </div>
             </div>
         </n-space>
@@ -116,5 +160,9 @@ onBeforeMount(() => {
 .content {
     text-align: center;
     font-weight: 700;
+}
+p {
+    text-indent: 1rem;
+    font-size: medium;
 }
 </style>

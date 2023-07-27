@@ -1,31 +1,26 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
-import { h, ref } from 'vue';
+import { h } from 'vue';
 import list from '@/router/routerConfig';
 import { NIcon, useMessage } from 'naive-ui';
 import {
-    BookmarkOutline as Bookmark,
     CashOutline as Cash,
     HomeOutline as Home,
-    List as List,
     LogInOutline as Login,
     LogOutOutline as LogoutIcon,
     MoonOutline,
     Pencil as EditIcon,
     PersonCircleOutline as UserIcon,
-    SearchOutline as Search,
     SunnyOutline,
     ListOutline as NavList,
     BookOutline as Book,
 } from '@vicons/ionicons5';
 import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/theme';
-import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { useIsMobile } from '@/responseDivice';
 
-const { active } = storeToRefs(useUserStore());
-const { toggleTheme } = useUserStore();
+const { toggleTheme, active } = useUserStore();
 const { hasToken, getToken } = useAuthStore();
 const message = useMessage();
 const router = useRouter();
@@ -127,23 +122,6 @@ const handlingLogout = () => {
     router.push('/login');
 };
 
-const bookOptions = [
-    {
-        label: () =>
-            h(
-                RouterLink,
-                {
-                    to: {
-                        path: '/mybook',
-                    },
-                },
-                { default: () => 'favorite' }
-            ),
-        key: 'favorite',
-        icon: renderIcon(List),
-    },
-];
-
 const langOptions = [
     {
         label: 'EN',
@@ -158,15 +136,6 @@ const langOptions = [
         value: 'th',
     },
 ];
-
-// todo: search function
-// const msg = ref<string>('');
-// const find = () => {
-//     if (msg.value) {
-//         alert('find value');
-//         msg.value = '';
-//     }
-// };
 </script>
 <template>
     <n-layout-header class="header" :bordered="false">
@@ -193,55 +162,29 @@ const langOptions = [
                     </router-link>
                     <router-link v-for="item in list" :key="item.name" :to="item.path">
                         <n-button text style="font-size: larger">
-                            {{ $t(`page.${item.name}`) }}
+                            {{ $t(`page.${String(item.name)}`) }}
                         </n-button>
                     </router-link>
-                    <div>
-                        <n-dropdown :options="bookOptions">
-                            <n-button text>
-                                <n-icon size="25">
-                                    <Bookmark />
-                                </n-icon>
-                            </n-button>
-                        </n-dropdown>
-                    </div>
                 </n-space>
             </div>
 
-            <!-- <div v-if="!isMobile">
-                <n-input round placeholder="Search " @keyup.enter="find" v-model:value="msg">
-                    <template #suffix>
-                        <n-button text>
-                            <n-icon :size="30" @click="find">
-                                <search />
-                            </n-icon>
-                        </n-button>
-                    </template>
-                </n-input>
-            </div> -->
             <div>
                 <n-space>
-                    <div>
-                        <n-space vertical style="width: 65px">
-                            <n-select
-                                v-model:value="$i18n.locale"
-                                :options="langOptions"
-                                size="small "
-                            />
-                        </n-space>
-                    </div>
-                    <div>
-                        <div>
-                            <n-switch v-model:value="active" @click="toggleTheme" size="medium">
-                                <template #checked-icon>
-                                    <n-icon :component="MoonOutline" />
-                                </template>
-                                <template #unchecked-icon>
-                                    <n-icon :component="SunnyOutline" />
-                                </template>
-                            </n-switch>
-                        </div>
-                    </div>
+                    <n-space vertical style="width: 65px">
+                        <n-select
+                            v-model:value="$i18n.locale"
+                            :options="langOptions"
+                            size="small "
+                        />
+                    </n-space>
+                    <n-switch v-model="active" @click="toggleTheme" size="medium">
+                        <template #checked-icon>
+                            <n-icon :component="MoonOutline" />
+                        </template>
+                        <template #unchecked-icon>
+                            <n-icon :component="SunnyOutline" />
+                        </template>
+                    </n-switch>
                     <div v-if="hasToken()">
                         <n-dropdown :options="options">
                             <n-button text>

@@ -3,40 +3,9 @@ import NavBar from '@/components/VueNavBar.vue';
 import Footer from '@/components/VueFooter.vue';
 import { useUserStore } from './stores/theme';
 import { storeToRefs } from 'pinia';
-import { darkTheme, lightTheme, useMessage } from 'naive-ui';
-import { useAuthStore } from '@/stores/auth';
-import { refresh } from '@/services/authService';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { darkTheme, lightTheme } from 'naive-ui';
 
 const { theme } = storeToRefs(useUserStore());
-const { saveToken, getToken, hasToken } = useAuthStore();
-const { token } = storeToRefs(useAuthStore());
-const router = useRouter();
-
-// async function checkTokenExp() {
-//     const accessExpire = token.value?.accessExpire;
-//     if (accessExpire) {
-//         const cuurentTime = Date.now();
-//         if (cuurentTime > accessExpire) {
-//             try {
-//                 const response = await refresh(token.value?.refreshToken);
-//                 if (response != 200) {
-//                     console.log('response ', response.data.result);
-//                     return;
-//                 }
-//                 saveToken(response.data.result);
-//                 router.push('/');
-//             } catch (e) {
-//                 router.push('/login');
-//             }
-//         } else {
-//             console.log('token ', token.value?.accessToken);
-//         }
-//     } else {
-//         console.log('token not found!');
-//     }
-// }
 </script>
 
 <template>

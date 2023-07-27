@@ -1,4 +1,4 @@
-import { useMemo, useBreakpoint } from "vooks";
+import { useMemo, useBreakpoint } from 'vooks';
 
 export function useIsMobile() {
     const breakpointRef = useBreakpoint();
