@@ -1,6 +1,6 @@
 # novel-shop
   
- (https://novelshop.netlify.app)
+ https://novelshop.netlify.app
 
 ## Customize configuration
 
