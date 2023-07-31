@@ -11,22 +11,12 @@ import { useAuthStore } from '@/stores/auth';
 import { storeToRefs } from 'pinia';
 import { useNotification } from 'naive-ui';
 
-import { type BookCartResponse } from '@/services';
-
 const { token } = storeToRefs(useAuthStore());
 const { countCart } = storeToRefs(useCartStore());
-const { addCartItem, countItems, getCart, clearItem } = useCartStore();
+const { addCartItem } = useCartStore();
 const paramId = Number(useRoute().params.id);
 const urlImg = import.meta.env.VITE_IMAGEURL;
 const quatityItem = ref<number>(0);
-
-const cartItem = ref<BookCartResponse>({
-    bookId: 0,
-    name: '',
-    price: 0,
-    quantity: 0,
-    status: '',
-});
 
 const listBookRef = ref<Book>({
     id: 0,
@@ -69,33 +59,38 @@ async function addCart() {
         });
         return;
     }
-    countItems();
     try {
         addCartItem({
-            id: listBookRef.value.id,
-            name: listBookRef.value.name,
-            price: listBookRef.value.price,
-            quantity: quatityItem.value++,
-        });
-        const res = await createOrder({
             bookId: listBookRef.value.id,
             name: listBookRef.value.name,
             price: listBookRef.value.price,
-            quantity: quatityItem.value,
+            quantity: quatityItem.value++,
             status: 'pending',
         });
+        notification.success({
+            title: 'Add to cart',
+            meta: 'Add  to cart success',
+            duration: 200,
+        });
+        // const res = await createOrder({
+        //     bookId: listBookRef.value.id,
+        //     name: listBookRef.value.name,
+        //     price: listBookRef.value.price,
+        //     quantity: quatityItem.value,
+        //     status: 'pending',
+        // });
 
-        if (res.status == 200 && res.data.code == 0) {
-            if (res.data.result) cartItem.value = res.data.result;
-            quatityItem.value = 0;
-            notification.success({
-                title: 'Add to cart',
-                meta: 'Add ' + cartItem.value.name + ' to cart success',
-                duration: 200,
-            });
+        // if (res.status == 200 && res.data.code == 0) {
+        //     if (res.data.result) cartItem.value = res.data.result;
+        //     quatityItem.value = 0;
+        //     notification.success({
+        //         title: 'Add to cart',
+        //         meta: 'Add ' + cartItem.value.name + ' to cart success',
+        //         duration: 200,
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
     } catch (e: unknown) {
         if (typeof e === 'string') {
             message.error('error' + e);

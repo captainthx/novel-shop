@@ -1,34 +1,53 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import type { BookCart } from '@/services';
+import type { BookCart, BookCartRequest } from '@/services';
 
 export const useCartStore = defineStore('cart', () => {
-    const cart = ref<BookCart[]>([]);
+    const cart = ref<BookCartRequest[]>([]);
     const countCart = ref<number>(0);
 
-    const addCartItem = (item: BookCart) => {
-        cart.value.push(item);
-        countCart.value = cart.value.length;
+    const addCartItem = (item: BookCartRequest) => {
+
+        const existhingItem = cart.value.find((e) => e.bookId === item.bookId);
+        if (existhingItem) {
+            existhingItem.quantity++;
+        } else {
+            cart.value.push({ ...item, quantity: 1 });
+        }
+        increedItems();
+    };
+
+    const removeQuantityItem = (item: BookCartRequest) => {
+        reduceItems();
+        const existhingItem = cart.value.find((e) => e.bookId === item.bookId);
+        if (existhingItem) {
+            existhingItem.quantity--;
+        }
 
     };
 
-    const countItems = () => {
-        countCart.value++;
-    };
-
-    const clearItem = () => {
+    const clearCart = () => {
         cart.value = [];
         countCart.value = 0;
     };
 
-    const removeCartItem = (id: number) => {
-        cart.value.filter((item) => item.id !== id);
+    const increedItems = () => {
+        countCart.value++;
     };
 
-    const getCart = () => {
-        return countCart.value;
+    const reduceItems = () => {
+        countCart.value--;
     };
 
-    return { countCart, addCartItem, removeCartItem, countItems, clearItem, getCart };
+
+
+    const removeCartItem = (bookId: number) => {
+        cart.value = cart.value.filter(item => item.bookId !== bookId);
+        reduceItems();
+
+    };
+
+
+    return { cart, countCart, addCartItem, removeCartItem, reduceItems, removeQuantityItem, clearCart };
 });

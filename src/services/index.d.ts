@@ -72,7 +72,7 @@ export interface Book {
 
 
 export interface BookCart {
-    id: number;
+    bookId: number;
     name: string;
     quantity: number;
     price: number;
@@ -83,9 +83,11 @@ export interface BookCartRequest {
     name: string;
     quantity: number;
     price: number;
-    quantity: number;
     status: string;
 }
+
+
+
 
 export interface BookCartResponse {
     bookId: number;
