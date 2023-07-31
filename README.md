@@ -1,7 +1,6 @@
 # novel-shop
-
-This web is deploy in netify
--> (https://novelshop.netlify.app)
+  
+ (https://novelshop.netlify.app)
 
 ## Customize configuration
 
