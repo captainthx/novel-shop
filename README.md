@@ -1,8 +1,7 @@
 # novel-shop
 
-This template should help get you started developing with Vue 3 in Vite.
-
-hosting in  novelshop.netlify.app
+This web is deploy in netify
+-> (https://novelshop.netlify.app)
 
 ## Customize configuration
 
