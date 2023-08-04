@@ -6,4 +6,6 @@ const createAddress = (body: Address): ServerResponse<AddressResponse> =>
 
 const fetchAddress = (): ServerResponse<AddressResponse[]> => api.get('/v1/address');
 
+
+
 export { createAddress, fetchAddress };

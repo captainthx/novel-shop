@@ -11,31 +11,32 @@ import {
     RemoveOutline as Remove,
     AddOutline as Add,
 } from '@vicons/ionicons5';
+import { useRouter } from 'vue-router';
 
 const { cart } = storeToRefs(useCartStore());
 const { removeQuantityItem, addCartItem, removeCartItem, clearCart } = useCartStore();
 const loading = ref(false);
 const message = useMessage();
+const router = useRouter();
 const addressList = ref<AddressResponse[]>([]);
 const select = ref<AddressResponse>();
 
 async function confrim() {
-    loading.value = true;
-
-    try {
-        const res = await createOrder(cart.value);
-        if (res.status == 200 && res.data.code == 0) {
-            message.success('Confrim Order Success');
-            loading.value = false;
-            clearCart();
-        }
-    } catch (e: unknown) {
-        if (typeof e === 'string') {
-            console.error(e);
-        } else if (e instanceof Error) {
-            console.error(e.message);
-        }
-    }
+    router.push('/payment');
+    // try {
+    //     const res = await createOrder(cart.value);
+    //     if (res.status == 200 && res.data.code == 0) {
+    //         message.success('Confrim Order Success');
+    //         loading.value = false;
+    //         clearCart();
+    //     }
+    // } catch (e: unknown) {
+    //     if (typeof e === 'string') {
+    //         console.error(e);
+    //     } else if (e instanceof Error) {
+    //         console.error(e.message);
+    //     }
+    // }
 }
 
 async function fetchAddressData() {
@@ -163,7 +164,7 @@ onBeforeMount(() => {
         <n-space justify="end" style="margin-top: 15px">
             <n-popconfirm @positive-click="confrim">
                 <template #trigger>
-                    <n-button round :loading="loading">Quote</n-button>
+                    <n-button round>confirm</n-button>
                 </template>
                 Are you sure for confirm orders!.
             </n-popconfirm>

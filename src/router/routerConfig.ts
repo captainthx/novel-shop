@@ -31,6 +31,11 @@ const list: RouteRecordRaw[] = [
                 component: () => import('@/views/ProfileView.vue'),
             },
             {
+                path: 'payment',
+                name: 'payment',
+                component: () => import('@/views/PaymentView.vue'),
+            },
+            {
                 path: '/:pathMatch(.*)*',
                 component: () => import('@/components/VueNotFound.vue'),
             },
@@ -53,12 +58,11 @@ const list: RouteRecordRaw[] = [
                 path: ':id',
                 component: () => import('@/views/BookDetailView.vue'),
             },
+            {
+                path: 'list',
+                component: () => import('@/views/BookListView.vue'),
+            }
         ],
-    },
-    {
-        path: '/payment',
-        component: () => import('@/views/PaymentView.vue'),
-        name: 'payment',
     },
     {
         path: '/about',

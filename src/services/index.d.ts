@@ -109,3 +109,11 @@ export interface AddressResponse {
     line2: string;
     zipCode: number;
 }
+
+
+export interface CreditForm {
+    cardName: string;
+    cardNumber: string;
+    expiryDate: string;
+    securityCode: string;
+}
