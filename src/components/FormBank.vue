@@ -1,31 +1,48 @@
 <script setup lang="ts">
+import type { BankPayment } from '@/services';
 import type { FormInst, UploadCustomRequestOptions } from 'naive-ui';
 import type { FileInfo } from 'naive-ui/es/upload/src/interface';
+import { createBankPayment } from '@/services/bankService';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const imageFile = ref<FileInfo>();
 const formRef = ref<FormInst | null>(null);
 const customRequest = ({ file }: UploadCustomRequestOptions) => {
     imageFile.value = file;
 };
-
-const model = ref({
-    imageName: '',
-    fullName: '',
-    datetimeValue: null,
+const model = ref<BankPayment>({
+    nameAccount: '',
+    transferDate: 0,
 });
+const formData = new FormData();
 
-function confrim(e: MouseEvent) {
+async function confrim(e: MouseEvent) {
     e.preventDefault();
-    if (imageFile.value?.file) model.value.imageName = imageFile.value?.file?.name;
-    console.log(model.value);
+    if (imageFile.value?.file) formData.append('file', imageFile.value?.file as File);
+    formData.append('request', JSON.stringify(model.value));
+    try {
+        const res = await createBankPayment(formData);
+        if (res.status === 200 && res.data.code == 0) {
+            router.push('/book/list');
+        }
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            console.error('error' + e);
+        } else if (e instanceof Error) {
+            console.error('error' + e.message);
+        } else {
+            console.error('Invalid');
+        }
+    }
 }
-
 const emit = defineEmits<{
     close: [value: boolean];
 }>();
 
 //TODO: add submit api confrim transfer
+//FIXME: Imgage bannk & number bank
 </script>
 
 <template>
@@ -49,13 +66,13 @@ const emit = defineEmits<{
                     </n-form-item>
                     <n-form-item label="ชื่อ-สกุล" path="name">
                         <n-input
-                            v-model:value="model.fullName"
+                            v-model:value="model.nameAccount"
                             placeholder="ชื่อ-สกุล(เจ้าของบัญชี)"
                         />
                     </n-form-item>
                     <n-form-item label="วันและเวลาที่โอน" path="datetimeValue">
                         <n-date-picker
-                            v-model:value="model.datetimeValue"
+                            v-model:value="model.transferDate"
                             type="datetime"
                             placeholder="วันและเวลาตามสลิป"
                         />

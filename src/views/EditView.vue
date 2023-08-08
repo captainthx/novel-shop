@@ -6,13 +6,10 @@ import { onBeforeMount, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 
 import { createAddress, fetchAddress } from '@/services/userService';
-import list from '@/router/routerConfig';
 
 const formRef = ref<FormInst | null>(null);
-const { getToken, hasToken } = useAuthStore();
 const message = useMessage();
 const showModal = ref(false);
-const errCode = ref<number>(0);
 const addressList = ref<AddressResponse[]>([]);
 const modelRef = ref<Address>({
     line1: '',

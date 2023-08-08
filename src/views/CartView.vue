@@ -12,31 +12,29 @@ import {
     AddOutline as Add,
 } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-
+const addressList = ref<AddressResponse[]>([]);
 const { cart } = storeToRefs(useCartStore());
 const { removeQuantityItem, addCartItem, removeCartItem, clearCart } = useCartStore();
 const loading = ref(false);
 const message = useMessage();
 const router = useRouter();
-const addressList = ref<AddressResponse[]>([]);
-const select = ref<AddressResponse>();
 
 async function confrim() {
-    router.push('/payment');
-    // try {
-    //     const res = await createOrder(cart.value);
-    //     if (res.status == 200 && res.data.code == 0) {
-    //         message.success('Confrim Order Success');
-    //         loading.value = false;
-    //         clearCart();
-    //     }
-    // } catch (e: unknown) {
-    //     if (typeof e === 'string') {
-    //         console.error(e);
-    //     } else if (e instanceof Error) {
-    //         console.error(e.message);
-    //     }
-    // }
+    try {
+        const res = await createOrder(cart.value);
+        if (res.status == 200 && res.data.code == 0) {
+            message.success('Confrim Order Success!');
+            loading.value = false;
+            clearCart();
+            router.push('/payment');
+        }
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            console.error(e);
+        } else if (e instanceof Error) {
+            console.error(e.message);
+        }
+    }
 }
 
 async function fetchAddressData() {
@@ -143,23 +141,6 @@ onBeforeMount(() => {
 <template>
     <n-layout-content content-style="padding: 25px; height: 75vh" :native-scrollbar="false">
         <h2 style="text-align: center">Book Cart</h2>
-        <n-space vertical>
-            <n-select
-                filterable
-                v-model:value="select"
-                placeholder="select address"
-                :options="
-                    addressList.map((item) => ({
-                        label: item.line1 + ' ' + item.line2 + ' ' + item.zipCode,
-                        value: item.id + '' + item.line1 + ' ' + item.line2 + ' ' + item.zipCode,
-                    }))
-                "
-                :loading="loading"
-                clearable
-                remote
-                :clear-filter-after-select="false"
-            />
-        </n-space>
         <n-data-table :columns="columns" :data="cart" :bordered="false" />
         <n-space justify="end" style="margin-top: 15px">
             <n-popconfirm @positive-click="confrim">
@@ -171,5 +152,3 @@ onBeforeMount(() => {
         </n-space>
     </n-layout-content>
 </template>
-
-<style scoped></style>

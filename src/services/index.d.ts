@@ -1,4 +1,5 @@
 import type { AxiosResponse } from 'axios';
+import type { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 export interface LoginData {
     username: string;
@@ -117,3 +118,31 @@ export interface CreditForm {
     expiryDate: string;
     securityCode: string;
 }
+
+
+
+export interface BankPayment {
+    nameAccount: string,
+    transferDate: number,
+};
+
+export interface PaymentHistory {
+    id: number;
+    status: string;
+    transferDate: number;
+    createTime: number;
+}
+
+export interface DeliveryRequest {
+    addressId: number;
+    fullname: string;
+    phone: number;
+}
+
+export interface DeliveryResponse {
+    fullName: string;
+    address: string;
+    phone: number;
+    cdt: number;
+}
+

@@ -22,14 +22,15 @@ function close() {
 <template>
     <n-layout-content content-style="padding: 25px; height: 75vh" :native-scrollbar="false">
         <n-space vertical>
-            <div class="title">
+            <n-space justify="center">
                 <h1>{{ $t('page.payment') }}</h1>
-            </div>
+            </n-space>
+
             <n-space justify="center">
                 <n-card
                     :title="$t('page.credit')"
-                    embedded="true"
-                    hoverable="true"
+                    :embedded="true"
+                    :hoverable="true"
                     @click="isOpen('credit')"
                 >
                     <n-icon size="30">
@@ -38,16 +39,16 @@ function close() {
                 </n-card>
                 <n-card
                     :title="$t('page.qrCode')"
-                    embedded="true"
-                    hoverable="true"
+                    :embedded="true"
+                    :hoverable="true"
                     @click="isOpen('qr')"
                 >
                     <n-icon size="30"> <QrCode /> </n-icon
                 ></n-card>
                 <n-card
                     :title="$t('page.bank')"
-                    embedded="true"
-                    hoverable="true"
+                    :embedded="true"
+                    :hoverable="true"
                     @click="isOpen('bank')"
                 >
                     <n-icon size="30"> <Cash /> </n-icon
@@ -55,7 +56,8 @@ function close() {
                 <n-space justify="end">
                     <FormCredit v-show="active === 'credit'" />
                 </n-space>
-                <n-spcae justify="end">
+                <!-- <n-spcae justify="end">
+                    <H3 v-show="active === 'qr'">Comming soon!</H3>
                     <n-image
                         v-show="active === 'qr'"
                         title="QR payment"
@@ -64,7 +66,7 @@ function close() {
                         src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
                         :previewed-img-props="{ style: { border: '8px solid white' } }"
                     />
-                </n-spcae>
+                </n-spcae> -->
                 <n-space justify="end">
                     <FormBank v-show="active === 'bank'" @close="close" />
                 </n-space>
