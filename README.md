@@ -2,6 +2,8 @@
   
  https://novelshop.netlify.app
 
+---- developing ----
+
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
