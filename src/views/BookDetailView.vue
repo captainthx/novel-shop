@@ -2,7 +2,6 @@
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchById } from '@/services/globalService';
-import { createOrder } from '@/services/orderSerivce';
 import { useLoadingBar, useMessage } from 'naive-ui';
 import type { Book } from '@/services';
 import { CartOutline } from '@vicons/ionicons5';
@@ -72,25 +71,6 @@ async function addCart() {
             meta: 'Add  to cart success',
             duration: 200,
         });
-        // const res = await createOrder({
-        //     bookId: listBookRef.value.id,
-        //     name: listBookRef.value.name,
-        //     price: listBookRef.value.price,
-        //     quantity: quatityItem.value,
-        //     status: 'pending',
-        // });
-
-        // if (res.status == 200 && res.data.code == 0) {
-        //     if (res.data.result) cartItem.value = res.data.result;
-        //     quatityItem.value = 0;
-        //     notification.success({
-        //         title: 'Add to cart',
-        //         meta: 'Add ' + cartItem.value.name + ' to cart success',
-        //         duration: 200,
-        //     });
-
-        //     return;
-        // }
     } catch (e: unknown) {
         if (typeof e === 'string') {
             message.error('error' + e);

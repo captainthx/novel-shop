@@ -46,7 +46,7 @@ const columns: DataTableColumns = [
                             NButton,
                             {
                                 onClick: () => {
-                                    downloadFile;
+                                    downloadFile();
                                 },
                                 text: true,
                             },
@@ -59,7 +59,7 @@ const columns: DataTableColumns = [
                             NButton,
                             {
                                 onClick: () => {
-                                    sendBook;
+                                    sendBook();
                                 },
                                 text: true,
                             },
@@ -133,8 +133,8 @@ async function downloadFile() {
 }
 
 async function sendBook(e: MouseEvent) {
-    e.preventDefault();
     showModal.value = true;
+    e.preventDefault();
     formRef.value?.validate(async (error: Array<FormValidationError> | undefined) => {
         if (!error) {
             try {
@@ -207,13 +207,14 @@ onBeforeMount(() => {
                 remote
                 :clear-filter-after-select="false"
             />
-            <n-form ref="formRef" :model="formDelivery" :rules="rules">
+            <n-form ref="formRef" :model="formDelivery" :rules="rules" @submit="sendBook">
                 <n-form-item path="fullname" label="fullName">
                     <n-input v-model:value="formDelivery.fullname" @keydown.enter.prevent />
                 </n-form-item>
                 <n-form-item path="phone" label="phone">
                     <n-input v-model:value="formDelivery.phone" @keydown.enter.prevent />
                 </n-form-item>
+                <n-button type="info" attr-type="submit" block> confrim </n-button>
             </n-form>
         </n-modal>
     </n-layout-content>

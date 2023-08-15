@@ -6,10 +6,16 @@ import { storeToRefs } from 'pinia';
 import { darkTheme, lightTheme } from 'naive-ui';
 
 const { theme } = storeToRefs(useUserStore());
+
+import { NConfigProvider } from 'naive-ui';
+import { themeOverrides } from './themeOverrides';
 </script>
 
 <template>
-    <n-config-provider :theme="theme === 'light' ? lightTheme : darkTheme">
+    <n-config-provider
+        :theme="theme === 'light' ? lightTheme : darkTheme"
+        :theme-overrides="themeOverrides"
+    >
         <n-loading-bar-provider>
             <n-message-provider>
                 <n-notification-provider>

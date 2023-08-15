@@ -12,7 +12,7 @@ defineProps<{
     <n-grid cols="1 s:2 m:3 l:5" responsive="screen" :x-gap="12" :y-gap="12">
         <n-grid-item v-for="list in listBookRef" :key="list.id">
             <router-link :to="`/book/${list.id}`">
-                <n-card :embedded="true" hoverable>
+                <n-card hoverable>
                     <template #cover>
                         <img
                             alt="img book"

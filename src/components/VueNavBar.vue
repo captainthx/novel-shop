@@ -140,71 +140,62 @@ const langOptions = [
 <template>
     <n-layout-header class="header" :bordered="false">
         <n-space justify="space-between">
-            <div>
-                <n-button text v-if="isMobile">
-                    <n-icon size="25">
-                        <n-dropdown :options="navOptions">
-                            <n-button text>
-                                <n-icon size="25">
-                                    <NavList />
-                                </n-icon>
-                            </n-button>
-                        </n-dropdown>
-                    </n-icon>
-                </n-button>
-                <n-space v-else>
-                    <router-link to="/">
+            <n-button text v-if="isMobile">
+                <n-icon size="25">
+                    <n-dropdown :options="navOptions">
                         <n-button text>
-                            <n-icon :size="20">
-                                <Home />
+                            <n-icon size="25">
+                                <NavList />
+                            </n-icon>
+                        </n-button>
+                    </n-dropdown>
+                </n-icon>
+            </n-button>
+            <n-space v-else>
+                <router-link to="/">
+                    <n-button text>
+                        <n-icon :size="20">
+                            <Home />
+                        </n-icon>
+                    </n-button>
+                </router-link>
+                <router-link v-for="item in list" :key="item.name" :to="item.path">
+                    <n-button text style="font-size: larger">
+                        {{ $t(`page.${String(item.name)}`) }}
+                    </n-button>
+                </router-link>
+            </n-space>
+            <n-space>
+                <n-space vertical style="width: 65px">
+                    <n-select v-model:value="$i18n.locale" :options="langOptions" size="small " />
+                </n-space>
+                <n-switch v-model="active" @click="toggleTheme" size="medium">
+                    <template #checked-icon>
+                        <n-icon :component="MoonOutline" />
+                    </template>
+                    <template #unchecked-icon>
+                        <n-icon :component="SunnyOutline" />
+                    </template>
+                </n-switch>
+                <div v-if="hasToken()">
+                    <n-dropdown :options="options">
+                        <n-button text>
+                            <n-icon size="25">
+                                <UserIcon />
+                            </n-icon>
+                        </n-button>
+                    </n-dropdown>
+                </div>
+                <div v-else>
+                    <router-link to="/login">
+                        <n-button text>
+                            <n-icon size="25">
+                                <Login />
                             </n-icon>
                         </n-button>
                     </router-link>
-                    <router-link v-for="item in list" :key="item.name" :to="item.path">
-                        <n-button text style="font-size: larger">
-                            {{ $t(`page.${String(item.name)}`) }}
-                        </n-button>
-                    </router-link>
-                </n-space>
-            </div>
-
-            <div>
-                <n-space>
-                    <n-space vertical style="width: 65px">
-                        <n-select
-                            v-model:value="$i18n.locale"
-                            :options="langOptions"
-                            size="small "
-                        />
-                    </n-space>
-                    <n-switch v-model="active" @click="toggleTheme" size="medium">
-                        <template #checked-icon>
-                            <n-icon :component="MoonOutline" />
-                        </template>
-                        <template #unchecked-icon>
-                            <n-icon :component="SunnyOutline" />
-                        </template>
-                    </n-switch>
-                    <div v-if="hasToken()">
-                        <n-dropdown :options="options">
-                            <n-button text>
-                                <n-icon size="25">
-                                    <UserIcon />
-                                </n-icon>
-                            </n-button>
-                        </n-dropdown>
-                    </div>
-                    <div v-else>
-                        <router-link to="/login">
-                            <n-button text>
-                                <n-icon size="25">
-                                    <Login />
-                                </n-icon>
-                            </n-button>
-                        </router-link>
-                    </div>
-                </n-space>
-            </div>
+                </div>
+            </n-space>
         </n-space>
     </n-layout-header>
 </template>

@@ -82,6 +82,6 @@ function next(e: MouseEvent) {
         <n-form-item path="securityCode" label="Securitycode">
             <n-input v-model:value="formCredit.securityCode" type="text" @keydown.enter.prevent />
         </n-form-item>
-        <n-button type="primary" block secondary attr-type="submit"> Next </n-button>
+        <n-button type="info" block attr-type="submit"> Next </n-button>
     </n-form>
 </template>
