@@ -6,10 +6,11 @@ export const themeOverrides: GlobalThemeOverrides = {
         "primaryColorHover": "#A4EBF3",
         "cardColor": "#F4F9F9",
         "modalColor": "#F4F9F9",
-        "fontSize": "16px"
+        "fontSize": "16px",
+        "textColorBase": "#000000",
     },
     Dropdown: {
-        color: '#3F2305',
+        color: '#F4F9F9',
         colorActive: '#D6C6C6FF',
         optionColorHover: '#D6C6C6FF',
     },
@@ -20,9 +21,14 @@ export const themeOverrides: GlobalThemeOverrides = {
         buttonColorHover: '#D6C6C6FF',
     },
     Notification: {
-        color: '#3F2305',
+        color: '#F4F9F9',
         textColor: '#000000'
+    },
+    Button: {
+        color: '#A4EBF3',
+        textColorHover: '#000000',
     }
+
 };
 
 

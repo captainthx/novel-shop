@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import type { BookCart, BookCartRequest } from '@/services';
+import type { BookCartRequest } from '@/services';
 
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<BookCartRequest[]>([]);

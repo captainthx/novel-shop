@@ -8,7 +8,7 @@ const api: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_APIURL,
     headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.value?.accessToken}`,
+        'Authorization': `Bearer ${token.value?.accessToken}`,
     },
 });
 

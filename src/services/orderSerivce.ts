@@ -1,4 +1,3 @@
-import { type AddressResponse } from './index.d';
 import api from '@/services/client';
 import type { BookCartRequest, BookCartResponse, ServerResponse } from '@/services/index';
 

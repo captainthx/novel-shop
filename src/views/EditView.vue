@@ -135,7 +135,7 @@ onBeforeMount(() => {
                             </n-form-item>
                         </n-form>
                         <div style="display: flex; justify-content: flex-end">
-                            <n-button round type="primary" @click="handleSubmit">submit</n-button>
+                            <n-button round @click="handleSubmit">submit</n-button>
                         </div>
                     </n-modal>
                 </n-space>

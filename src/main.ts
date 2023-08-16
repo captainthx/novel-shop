@@ -24,8 +24,9 @@ const i18n = createI18n({
 setupErrorHandler(router);
 
 const app = createApp(App);
+const pinia = createPinia();
 
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.use(naive);
 app.use(i18n);

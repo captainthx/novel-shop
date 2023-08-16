@@ -69,7 +69,7 @@ async function addCart() {
         notification.success({
             title: 'Add to cart',
             meta: 'Add  to cart success',
-            duration: 200,
+            duration: 500,
         });
     } catch (e: unknown) {
         if (typeof e === 'string') {
@@ -83,7 +83,7 @@ async function addCart() {
         }
     }
 }
-// const tokenData = JSON.parse(atob(token.value?.accessToken.split('.')[1])) as tokenPayload;
+// const tokenData = JSON.parse(atob(token.value.accessToken.split('.')[1])) as TokenPayload;
 
 onBeforeMount(async () => {
     if (paramId) await fetchBookById();

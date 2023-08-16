@@ -6,7 +6,7 @@ const login = (body: LoginData): ServerResponse<TokenResponse> => api.post('/v1/
 
 const signup = (body: RegisterData): ServerResponse<void> => api.post('/v1/auth/signup', body);
 
-const refresh = (refreshToken: string | undefined): ServerResponse<TokenResponse> =>
-    api.post('v1/auth/refresh', refreshToken);
+const refresh = (refreshToken: string): ServerResponse<TokenResponse> =>
+    api.post('v1/auth/refresh', { refreshToken: refreshToken });
 
 export { login, signup, refresh };

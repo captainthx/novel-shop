@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { fetchNewBooks } from '@/services/globalService';
 import type { Book, Pagination, PaginationResponse } from '@/services';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch, type Ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import { useLoadingBar, useMessage } from 'naive-ui';
 import ShowBook from '@/components/ShowBook.vue';
 import Banner from '@/components/Banner.vue';
+import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
+import { refresh } from '@/services/authService';
 
+const authStore = useAuthStore();
+const { getToken, saveToken, hasToken } = authStore;
+const token = authStore.token;
 const urlImg = import.meta.env.VITE_IMAGEURL;
 const listBookRef = ref<Book[]>([]);
 const loadingBar = useLoadingBar();
@@ -48,6 +54,43 @@ function handleNextPage(page: number) {
     fetchBook();
     return paramPage.value.page;
 }
+
+async function refreshToken() {
+    try {
+        const res = await refresh(token?.refreshToken as string);
+        if (res.status == 200 && res.data.code == 0) {
+            if (res.data.result) saveToken(res.data.result);
+            getToken();
+            console.log('get refresh token success');
+        }
+    } catch (e: unknown) {
+        if (typeof e === 'string') {
+            console.error('error' + e);
+        } else if (e instanceof Error) {
+            console.error('error' + e.message);
+        }
+    }
+}
+
+async function checkExpiredToken() {
+    const min = 60000;
+    const cuurentTime = new Date().getTime() - min;
+    const exprieToken: number = token?.accessExpire as number;
+    if (cuurentTime > exprieToken) {
+        await refreshToken();
+    } else {
+        console.log('token not expired');
+    }
+}
+
+onMounted(() => {
+    checkExpiredToken();
+    const interval = setInterval(checkExpiredToken, 60 * 60 * 1000);
+
+    onUnmounted(() => {
+        clearInterval(interval);
+    });
+});
 
 onBeforeMount(async () => {
     await fetchBook();

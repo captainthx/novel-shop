@@ -72,7 +72,7 @@ const handleLogin = async (e: MouseEvent) => {
                         <n-input v-model:value="loginFrom.password" type="password" />
                     </n-form-item-row>
                 </n-form>
-                <n-button type="primary" block secondary @click="handleLogin"> Sign In </n-button>
+                <n-button block @click="handleLogin"> Sign In </n-button>
             </n-card>
         </n-space>
     </n-layout>
