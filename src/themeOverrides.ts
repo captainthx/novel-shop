@@ -27,20 +27,24 @@ export const themeOverrides: GlobalThemeOverrides = {
     Button: {
         color: '#A4EBF3',
         textColorHover: '#000000',
-    }
+    },
 
 };
 
 
-const lightThemeOverrides = {
+export const lightThemeOverrides = {
     common: {
         primaryColor: '#000000'
-    }
+    },
     // ...
 };
 
-const darkThemeOverrides = {
-    common: {
-        primaryColor: '#FFFFFF'
-    }
+export const darkThemeOverrides = {
+    "common": {
+        "primaryColor": "#000000",
+        "primaryColorHover": "#AAAAAA",
+        "cardColor": "#F4F9F9",
+        "modalColor": "#F4F9F9",
+    },
+    // ...
 };

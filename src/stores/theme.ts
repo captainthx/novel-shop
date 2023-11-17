@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n';
 
 export const useUserStore = defineStore('user', () => {
     const theme = ref('light');
+    const i18n = useI18n();
+
     function toggleTheme() {
         theme.value = theme.value === 'light' ? 'dark' : 'light';
     }
@@ -13,11 +15,11 @@ export const useUserStore = defineStore('user', () => {
     }
 
     function toggleLang() {
-        useI18n().locale = 'ja';
+        i18n.locale.value = 'ja';
     }
 
     function activeLang() {
-        return useI18n().locale;
+        return useI18n().locale.value;
     }
 
     return { theme, active, toggleTheme, toggleLang, activeLang };

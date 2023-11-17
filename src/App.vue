@@ -2,20 +2,16 @@
 import NavBar from '@/components/VueNavBar.vue';
 import Footer from '@/components/VueFooter.vue';
 import { useUserStore } from './stores/theme';
-import { darkTheme, lightTheme } from 'naive-ui';
+import { lightTheme, darkTheme } from 'naive-ui';
 import { NConfigProvider } from 'naive-ui';
-import { themeOverrides } from './themeOverrides';
 
-const userStore = useUserStore();
+// const { theme } = storeToRefs(useUserStore());
 
-const theme = userStore.theme;
+const theme = useUserStore();
 </script>
 
 <template>
-    <n-config-provider
-        :theme="theme === 'light' ? lightTheme : darkTheme"
-        :theme-overrides="themeOverrides"
-    >
+    <n-config-provider :theme="theme.theme == 'light' ? lightTheme : darkTheme">
         <n-loading-bar-provider>
             <n-message-provider>
                 <n-notification-provider>

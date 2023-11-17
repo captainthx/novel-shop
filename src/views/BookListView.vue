@@ -132,9 +132,8 @@ async function downloadFile() {
     URL.revokeObjectURL(url);
 }
 
-async function sendBook(e: MouseEvent) {
+async function sendBook() {
     showModal.value = true;
-    e.preventDefault();
     formRef.value?.validate(async (error: Array<FormValidationError> | undefined) => {
         if (!error) {
             try {

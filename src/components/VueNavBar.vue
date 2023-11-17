@@ -19,12 +19,15 @@ import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/theme';
 import { useAuthStore } from '@/stores/auth';
 import { useIsMobile } from '@/responseDivice';
+import { useI18n } from 'vue-i18n';
 
-const { toggleTheme, active } = useUserStore();
+// const { toggleTheme, active } = useUserStore();
 const { hasToken, getToken } = useAuthStore();
+const { theme, toggleTheme } = useUserStore();
 const message = useMessage();
 const router = useRouter();
 const isMobile = useIsMobile();
+const i18n = useI18n();
 
 const renderIcon = (icon: Component) => {
     return () => {
@@ -167,9 +170,13 @@ const langOptions = [
             </n-space>
             <n-space>
                 <n-space vertical style="width: 65px">
-                    <n-select v-model:value="$i18n.locale" :options="langOptions" size="small " />
+                    <n-select
+                        v-model:value="i18n.locale.value"
+                        :options="langOptions"
+                        size="small "
+                    />
                 </n-space>
-                <n-switch v-model="active" @click="toggleTheme" size="medium">
+                <n-switch v-model="theme" @click="toggleTheme" size="medium">
                     <template #checked-icon>
                         <n-icon :component="MoonOutline" />
                     </template>

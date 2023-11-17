@@ -1,5 +1,4 @@
 import type { AxiosResponse } from 'axios';
-import type { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 export interface LoginData {
     username: string;
@@ -71,7 +70,6 @@ export interface Book {
     imageName: string;
 }
 
-
 export interface BookCart {
     bookId: number;
     name: string;
@@ -86,9 +84,6 @@ export interface BookCartRequest {
     price: number;
     status: string;
 }
-
-
-
 
 export interface BookCartResponse {
     bookId: number;
@@ -111,7 +106,6 @@ export interface AddressResponse {
     zipCode: number;
 }
 
-
 export interface CreditForm {
     cardName: string;
     cardNumber: string;
@@ -119,12 +113,10 @@ export interface CreditForm {
     securityCode: string;
 }
 
-
-
 export interface BankPayment {
-    nameAccount: string,
-    transferDate: number,
-};
+    nameAccount: string;
+    transferDate: number;
+}
 
 export interface PaymentHistory {
     id: number;
@@ -145,4 +137,3 @@ export interface DeliveryResponse {
     phone: number;
     cdt: number;
 }
-

@@ -65,11 +65,6 @@ const list: RouteRecordRaw[] = [
         ],
     },
     {
-        path: '/about',
-        component: () => import('@/views/AboutView.vue'),
-        name: 'about',
-    },
-    {
         path: '/cart',
         component: () => import('@/views/CartView.vue'),
         name: 'cart',
